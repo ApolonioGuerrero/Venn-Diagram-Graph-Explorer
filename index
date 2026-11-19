@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Venn Diagram Practice — Set Theory Expression Match</title>
+  
+  <!-- Tailwind CSS for responsive, modern styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- MathJax Configuration & Script -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' },
+      options: { enableMenu: false }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    
+    /* Smooth focus rings for accessibility */
+    button:focus-visible {
+      outline: 3px solid #1d4ed8;
+      outline-offset: 2px;
+    }
+
+    /* SVG container setup */
+    .svg-container svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+    }
+
+    /* Animation for feedback appearance */
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-enter {
+      animation: slideDown 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col selection:bg-blue-700 selection:text-white">
+
+  <!-- Header -->
+  <header class="bg-blue-900 text-white py-6 px-4 shadow-md border-b-4 border-blue-950">
+    <div class="max-w-5xl mx-auto text-center">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
+        Venn Diagram Practice
+      </h1>
+      <p class="mt-2 text-blue-100 text-sm sm:text-base max-w-2xl mx-auto font-medium">
+        Observe the shaded regions in the diagram below. Select the algebraic expression that perfectly matches the shading.
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 flex-grow space-y-6">
+
+    <!-- Controls & Score -->
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-300 gap-4">
+      
+      <!-- Difficulty Selector -->
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <span class="text-sm font-bold text-slate-700 uppercase tracking-wider">Level:</span>
+        <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 w-full sm:w-auto" role="group" aria-label="Difficulty level">
+          <button onclick="app.setDifficulty('easy')" id="btn-easy" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-blue-900 text-white shadow" aria-pressed="true">Easy</button>
+          <button onclick="app.setDifficulty('medium')" id="btn-medium" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Medium</button>
+          <button onclick="app.setDifficulty('hard')" id="btn-hard" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Advanced</button>
+        </div>
+      </div>
+
+      <!-- Score/Progress -->
+      <div class="text-sm font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-lg border border-slate-200" aria-live="polite">
+        Current Streak: <span id="streak-counter" class="text-blue-700 font-black text-lg">0</span>
+      </div>
+
+    </div>
+
+    <!-- Interactive Workspace -->
+    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-300 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Top/Left Column: Static Shaded SVG Diagram -->
+      <div class="lg:col-span-7 flex flex-col items-center justify-center relative">
+        <div id="venn-container" class="w-full max-w-lg svg-container bg-white p-2 rounded-xl">
+          <!-- SVG is injected here by JS -->
+        </div>
+      </div>
+
+      <!-- Bottom/Right Column: Multiple Choice Options & Actions -->
+      <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+        
+        <div class="space-y-4">
+          <h2 class="text-lg font-bold text-slate-800 uppercase tracking-wide border-b-2 border-slate-100 pb-2">
+            Select the Expression
+          </h2>
+          
+          <p class="text-sm text-slate-600 font-medium pb-2">
+            Which set notation produces the shading shown in the diagram?
+          </p>
+
+          <!-- Dynamically populated options list -->
+          <div id="options-list" class="space-y-3" role="radiogroup" aria-label="Algebraic expression options">
+            <!-- Buttons injected by JS -->
+          </div>
+          
+        </div>
+
+        <div class="space-y-3 pt-4 border-t-2 border-slate-100">
+          <button onclick="app.checkAnswer()" id="btn-check" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all text-lg flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Check Expression!
+          </button>
+          
+          <button onclick="app.nextQuestion()" id="btn-next" class="w-full py-3 px-4 bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+            Generate New Diagram
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Dynamic Feedback Box -->
+    <div id="feedback-panel" class="hidden rounded-xl p-5 shadow-md border-l-4" aria-live="polite">
+      <div class="flex items-start gap-4">
+        <div id="feedback-icon" class="flex-shrink-0 mt-0.5"></div>
+        <div class="space-y-1 w-full">
+          <h3 id="feedback-title" class="text-lg font-bold"></h3>
+          <p id="feedback-message" class="text-sm font-medium opacity-90 leading-relaxed"></p>
+          <div id="feedback-details" class="text-sm font-medium mt-3 space-y-2"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /**
+     * Application Logic
+     * Handles state, mathematical evaluation, dynamic option generation, and SVG rendering.
+     */
+
+    // --- Data & Configuration ---
+
+    const COLORS = {
+      SHADE: '#fcd34d',      // Amber 300 (WCAG friendly background)
+      STROKE_A: '#1e40af',   // Blue 800
+      STROKE_B: '#065f46',   // Emerald 800
+      STROKE_C: '#86198f',   // Fuchsia 800
+      FRAME: '#1e293b'       // Slate 800
+    };
+
+    const REGION_DESCRIPTIONS = {
+      1: "the region exclusively inside A, outside B and C",
+      2: "the intersection of A and B, outside C",
+      3: "the region exclusively inside B, outside A and C",
+      4: "the intersection of all three sets: A, B, and C",
+      5: "the intersection of A and C, outside B",
+      6: "the intersection of B and C, outside A",
+      7: "the region exclusively inside C, outside A and B",
+      8: "the region outside all sets"
+    };
+
+    const OP_DEFS = [
+      { trigger: '\\cup', name: 'Union', notation: '\\(A \\cup B = \\{x \\in U \\mid x \\in A \\text{ or } x \\in B\\}\\)', desc: 'The union combines all elements from the sets. If an element is in ANY of the sets involved, it belongs in the union.' },
+      { trigger: '\\cap', name: 'Intersection', notation: '\\(A \\cap B = \\{x \\in U \\mid x \\in A \\text{ and } x \\in B\\}\\)', desc: 'The intersection requires elements to be strictly in BOTH (or all) sets. Look for the overlapping regions where the conditions are met simultaneously.' },
+      { trigger: '^c', name: 'Complement', notation: '\\(A^c = \\{x \\in U \\mid x \\notin A\\}\\)', desc: 'The complement includes everything in the universal space that is NOT inside the specified set. Think of it as the strict "outside" of that set boundary.' },
+      { trigger: '-', name: 'Difference', notation: '\\(A - B = \\{x \\in A \\mid x \\notin B\\}\\)', desc: 'The difference removes any elements of the second set from the first. Start with the first set, and take away anything that also belongs to the second.' }
+    ];
+
+    const QUESTION_BANK = {
+      easy: [
+        { tex: "A", eval: (a,b,c) => a },
+        { tex: "B", eval: (a,b,c) => b },
+        { tex: "C", eval: (a,b,c) => c },
+        { tex: "A \\cup B", eval: (a,b,c) => a || b },
+        { tex: "A \\cap B", eval: (a,b,c) => a && b },
+        { tex: "C^c", eval: (a,b,c) => !c },
+        { tex: "A - B", eval: (a,b,c) => a && !b },
+        { tex: "B \\cap C", eval: (a,b,c) => b && c }
+      ],
+      medium: [
+        { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b) },
+        { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c) },
+        { tex: "(A \\cap B) \\cup C", eval: (a,b,c) => (a && b) || c },
+        { tex: "A^c \\cap B", eval: (a,b,c) => !a && b },
+        { tex: "A \\cup B \\cup C", eval: (a,b,c) => a || b || c },
+        { tex: "A \\cap B \\cap C", eval: (a,b,c) => a && b && c },
+        { tex: "C - (A \\cup B)", eval: (a,b,c) => c && !(a || b) }
+      ],
+      hard: [
+        { tex: "(B \\cup C) \\cap A^c", eval: (a,b,c) => (b || c) && !a },
+        { tex: "(A \\cup B) - C", eval: (a,b,c) => (a || b) && !c },
+        { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c },
+        { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c) },
+        { tex: "(A \\cap B)^c \\cap C", eval: (a,b,c) => !(a && b) && c },
+        { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c) },
+        { tex: "A - (B \\cap C)", eval: (a,b,c) => a && !(b && c) }
+      ]
+    };
+
+    // --- State Management ---
+    
+    const app = {
+      difficulty: 'easy',
+      targetQuestion: null,     // The expression dictating the shaded diagram
+      currentOptions: [],       // The 4 multiple choice options
+      selectedIndex: null,      // User's selected option index
+      correctIndex: null,       // Index of the correct answer
+      streak: 0,
+      
+      init() {
+        this.nextQuestion();
+      },
+
+      setDifficulty(level) {
+        this.difficulty = level;
+        
+        ['easy', 'medium', 'hard'].forEach(l => {
+          const btn = document.getElementById(`btn-${l}`);
+          if (l === level) {
+            btn.className = "flex-1 px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-blue-900 text-white shadow";
+            btn.setAttribute('aria-pressed', 'true');
+          } else {
+            btn.className = "flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors";
+            btn.setAttribute('aria-pressed', 'false');
+          }
+        });
+
+        this.streak = 0;
+        this.updateStreakUI();
+        this.nextQuestion();
+      },
+
+      nextQuestion() {
+        const bank = QUESTION_BANK[this.difficulty];
+        
+        // Pick a target question
+        let tIndex;
+        do {
+          tIndex = Math.floor(Math.random() * bank.length);
+        } while (bank.length > 1 && this.targetQuestion && bank[tIndex].tex === this.targetQuestion.tex);
+        
+        this.targetQuestion = bank[tIndex];
+        this.selectedIndex = null;
+        this.hideFeedback();
+        
+        // Gather 4 distinct distractors from the same bank to create 5 total options
+        let availableDistractors = bank.filter((_, i) => i !== tIndex);
+        availableDistractors.sort(() => 0.5 - Math.random());
+        const chosenDistractors = availableDistractors.slice(0, 4);
+
+        // Build and shuffle options array
+        this.currentOptions = [this.targetQuestion, ...chosenDistractors];
+        this.currentOptions.sort(() => 0.5 - Math.random());
+        this.correctIndex = this.currentOptions.indexOf(this.targetQuestion);
+
+        this.renderOptionsUI();
+        this.renderSVG(); 
+      },
+
+      renderOptionsUI() {
+        const container = document.getElementById('options-list');
+        container.innerHTML = '';
+
+        this.currentOptions.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.role = 'radio';
+          btn.setAttribute('aria-checked', 'false');
+          btn.id = `opt-${idx}`;
+          btn.className = 'w-full text-center p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all text-xl sm:text-2xl text-blue-950 font-bold';
+          btn.onclick = () => this.selectOption(idx);
+          btn.innerHTML = `\\(${opt.tex}\\)`;
+          container.appendChild(btn);
+        });
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([container]).catch(e => console.warn(e));
+        }
+      },
+
+      selectOption(idx) {
+        this.selectedIndex = idx;
+        this.hideFeedback();
+
+        this.currentOptions.forEach((_, i) => {
+          const el = document.getElementById(`opt-${i}`);
+          if (i === idx) {
+            el.setAttribute('aria-checked', 'true');
+            el.classList.add('border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-600');
+            el.classList.remove('border-slate-200', 'bg-slate-50', 'hover:bg-slate-100');
+          } else {
+            el.setAttribute('aria-checked', 'false');
+            el.classList.remove('border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-600');
+            el.classList.add('border-slate-200', 'bg-slate-50', 'hover:bg-slate-100');
+          }
+        });
+      },
+
+      getCorrectRegions(evalFunc) {
+        const regions = [];
+        if (evalFunc(true, false, false)) regions.push(1); 
+        if (evalFunc(true, true, false))  regions.push(2); 
+        if (evalFunc(false, true, false)) regions.push(3); 
+        if (evalFunc(true, true, true))   regions.push(4); 
+        if (evalFunc(true, false, true))  regions.push(5); 
+        if (evalFunc(false, true, true))  regions.push(6); 
+        if (evalFunc(false, false, true)) regions.push(7); 
+        if (evalFunc(false, false, false))regions.push(8); 
+        return regions;
+      },
+
+      checkAnswer() {
+        if (this.selectedIndex === null) {
+          this.showFeedback('error', 'Select an Expression', 'Please choose one of the algebraic expressions from the list above before checking your answer.');
+          return;
+        }
+
+        if (this.selectedIndex === this.correctIndex) {
+          // Success
+          this.streak++;
+          this.updateStreakUI();
+          this.showFeedback('success', "Spot On! \uD83C\uDF1F", "You correctly identified the mathematical logic that produces this shaded diagram. Excellent deductive work!");
+        } else {
+          // Incorrect: Employ Growth Mindset & Reverse Productive Struggle Logic
+          this.streak = 0;
+          this.updateStreakUI();
+          
+          const growthAffirmations = [
+            "Every mistake is a step forward. You're stretching your brain!",
+            "Analyzing mismatches is where the real learning happens.",
+            "Set theory can be tricky visually. Take a deep breath, review your choice, and try again!",
+            "You haven't got it *yet*, but analyzing what your expression actually shades will help it click."
+          ];
+          const affirmation = growthAffirmations[Math.floor(Math.random() * growthAffirmations.length)];
+
+          const userChoice = this.currentOptions[this.selectedIndex];
+          const opsInPlay = OP_DEFS.filter(def => userChoice.tex.includes(def.trigger));
+          
+          let detailsHtml = `<p class="mb-3 text-rose-950 font-bold opacity-90">${affirmation}</p>`;
+          
+          if (opsInPlay.length > 0) {
+            detailsHtml += `<div class="bg-white/70 p-4 rounded-xl border border-rose-200 shadow-sm mb-4">`;
+            detailsHtml += `<p class="font-extrabold text-rose-950 mb-2 uppercase text-xs tracking-wider">Definitions for the Expression You Chose:</p><ul class="list-none space-y-3">`;
+            opsInPlay.forEach(op => {
+              detailsHtml += `<li><span class="font-bold text-rose-900">${op.name}:</span> ${op.notation}<br><span class="opacity-80 block mt-1">${op.desc}</span></li>`;
+            });
+            detailsHtml += `</ul></div>`;
+          }
+
+          // Evaluate what the user's selected expression *would* have shaded
+          const userIds = this.getCorrectRegions(userChoice.eval);
+          const correctIds = this.getCorrectRegions(this.targetQuestion.eval);
+
+          // Missing: Regions SHADED in the diagram, but NOT in the user's expression
+          const missing = correctIds.filter(id => !userIds.includes(id));
+          // Extra: Regions NOT shaded in the diagram, but WOULD BE shaded by the user's expression
+          const extra = userIds.filter(id => !correctIds.includes(id));
+
+          detailsHtml += `<p class="font-extrabold text-rose-950 mt-4 mb-2 uppercase text-xs tracking-wider">Visual Clues (Productive Struggle):</p><ul class="list-disc pl-5 space-y-2 opacity-90">`;
+          
+          const hints = [];
+          if (missing.length > 0) {
+             const hintReg = missing[Math.floor(Math.random() * missing.length)];
+             hints.push(`Look at <b class="text-rose-950 font-bold">${REGION_DESCRIPTIONS[hintReg]}</b>. It is actively shaded in the diagram, but the expression you chose <em>leaves it out</em>.`);
+          }
+          if (extra.length > 0) {
+             const hintReg = extra[Math.floor(Math.random() * extra.length)];
+             hints.push(`The expression you selected would include <b class="text-rose-950 font-bold">${REGION_DESCRIPTIONS[hintReg]}</b>, but notice that this region is completely blank in the diagram.`);
+          }
+          
+          hints.forEach(h => {
+             detailsHtml += `<li>${h}</li>`;
+          });
+          detailsHtml += `</ul>`;
+          detailsHtml += `<p class="text-sm font-bold text-rose-900 mt-4 bg-rose-100/50 p-2 rounded-lg inline-block">Review the other options and select the one that perfectly fits!</p>`;
+          
+          this.showFeedback('error', "Not quite a match...", "Let's use this as a learning opportunity.", detailsHtml);
+        }
+      },
+
+      updateStreakUI() {
+        const el = document.getElementById('streak-counter');
+        el.innerText = this.streak;
+        el.classList.remove('scale-125', 'text-amber-500');
+        void el.offsetWidth; // trigger reflow
+        if(this.streak > 0) el.classList.add('scale-125', 'text-amber-500', 'transition-transform');
+      },
+
+      showFeedback(type, title, message, details = '') {
+        const panel = document.getElementById('feedback-panel');
+        const iconContainer = document.getElementById('feedback-icon');
+        const titleEl = document.getElementById('feedback-title');
+        
+        panel.className = 'rounded-xl p-5 shadow-md border-l-4 animate-enter block mt-6';
+        document.getElementById('feedback-message').innerText = message;
+        document.getElementById('feedback-details').innerHTML = details;
+        titleEl.innerText = title;
+
+        if (type === 'success') {
+          panel.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-950');
+          panel.classList.remove('bg-rose-50', 'border-rose-500', 'text-rose-950');
+          titleEl.classList.add('text-emerald-800');
+          iconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+        } else {
+          panel.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-950');
+          panel.classList.remove('bg-emerald-50', 'border-emerald-500', 'text-emerald-950');
+          titleEl.classList.add('text-rose-800');
+          iconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+        }
+
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([panel]).catch(e => console.warn(e));
+        }
+      },
+
+      hideFeedback() {
+        document.getElementById('feedback-panel').classList.add('hidden');
+        document.getElementById('feedback-panel').classList.remove('animate-enter', 'block');
+      },
+
+      // --- SVG Construction ---
+      
+      renderSVG() {
+        const container = document.getElementById('venn-container');
+        
+        const A = { cx: 115, cy: 110, r: 65 };
+        const B = { cx: 185, cy: 110, r: 65 };
+        const C = { cx: 150, cy: 170, r: 65 };
+        
+        const masks = `
+          <defs>
+            <clipPath id="cpA"><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}"/></clipPath>
+            <clipPath id="cpB"><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}"/></clipPath>
+            <clipPath id="cpC"><circle cx="${C.cx}" cy="${C.cy}" r="${C.r}"/></clipPath>
+
+            <mask id="m1">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m2">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff" clip-path="url(#cpA)"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m3">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff"/>
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m4">
+              <rect width="320" height="280" fill="#000"/>
+              <g clip-path="url(#cpA)">
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpB)"/>
+              </g>
+            </mask>
+
+            <mask id="m5">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpA)"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m6">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpB)"/>
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m7">
+              <rect width="320" height="280" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff"/>
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+            </mask>
+
+            <mask id="m8">
+              <rect width="320" height="280" fill="#fff"/>
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+            </mask>
+
+            <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="0" x2="0" y2="8" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" />
+            </pattern>
+          </defs>
+        `;
+
+        // Retrieve exactly which regions should be shaded for this target question
+        const correctRegions = new Set(this.getCorrectRegions(this.targetQuestion.eval));
+
+        let shadedLayers = '';
+        for (let i = 1; i <= 8; i++) {
+          if (correctRegions.has(i)) {
+            shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="${COLORS.SHADE}" mask="url(#m${i})"/>`;
+            shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="url(#hatch)" mask="url(#m${i})"/>`;
+          }
+        }
+
+        const svgMarkup = `
+          <svg viewBox="0 0 320 280" role="img" aria-label="A diagram with specific regions shaded corresponding to a set theory expression">
+            ${masks}
+
+            <!-- Universal Set Boundary -->
+            <rect x="25" y="30" width="260" height="235" rx="6" fill="#ffffff" stroke="${COLORS.FRAME}" stroke-width="2"/>
+            
+            <!-- U Label -->
+            <text x="292" y="55" font-size="18" font-weight="800" fill="${COLORS.FRAME}">U</text>
+
+            <!-- Active Shaded Regions Layer -->
+            <g id="shading-group">
+              ${shadedLayers}
+            </g>
+            
+            <!-- Set Boundaries -->
+            <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="none" stroke="${COLORS.STROKE_A}" stroke-width="2.5"/>
+            <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="none" stroke="${COLORS.STROKE_B}" stroke-width="2.5" />
+            <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="none" stroke="${COLORS.STROKE_C}" stroke-width="2.5" />
+            
+            <!-- Set Labels -->
+            <text x="60" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_A}" paint-order="stroke" stroke="#ffffff" stroke-width="5">A</text>
+            <text x="240" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_B}" paint-order="stroke" stroke="#ffffff" stroke-width="5">B</text>
+            <text x="150" y="255" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_C}" paint-order="stroke" stroke="#ffffff" stroke-width="5">C</text>
+          </svg>
+        `;
+
+        container.innerHTML = svgMarkup;
+      }
+    };
+
+    // Boot the app when DOM is ready
+    document.addEventListener("DOMContentLoaded", () => {
+      app.init();
+    });
+
+  </script>
+</body>
+</html>
