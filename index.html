@@ -81,28 +81,38 @@
     </div>
   </header>
 
+  <!-- Navigation Tabs -->
+  <nav class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 flex gap-2 overflow-x-auto no-scrollbar" role="tablist">
+    <button onclick="app.setMode('3set')" id="tab-3set" role="tab" class="px-5 py-2.5 font-bold rounded-t-xl transition-colors bg-white text-blue-900 border-t-2 border-l-2 border-r-2 border-slate-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">3-Set Practice</button>
+    <button onclick="app.setMode('2set')" id="tab-2set" role="tab" class="px-5 py-2.5 font-bold rounded-t-xl transition-colors bg-slate-200 text-slate-600 hover:bg-slate-300 border-b-2 border-slate-300">2-Set Practice</button>
+    <button onclick="app.setMode('review')" id="tab-review" role="tab" class="px-5 py-2.5 font-bold rounded-t-xl transition-colors bg-slate-200 text-slate-600 hover:bg-slate-300 border-b-2 border-slate-300">Review Definitions</button>
+  </nav>
+
   <!-- Main Content Container -->
-  <main class="max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 flex-grow space-y-6">
+  <main class="max-w-5xl w-full mx-auto px-4 sm:px-6 pb-8 flex-grow space-y-6">
 
-    <!-- Controls & Score -->
-    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-300 gap-4">
+    <!-- PRACTICE VIEW (2-Set & 3-Set) -->
+    <div id="practice-view" class="space-y-6">
       
-      <!-- Difficulty Selector -->
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <span class="text-sm font-bold text-slate-700 uppercase tracking-wider">Level:</span>
-        <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 w-full sm:w-auto" role="group" aria-label="Difficulty level">
-          <button onclick="app.setDifficulty('easy')" id="btn-easy" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-blue-900 text-white shadow" aria-pressed="true">Easy</button>
-          <button onclick="app.setDifficulty('medium')" id="btn-medium" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Medium</button>
-          <button onclick="app.setDifficulty('hard')" id="btn-hard" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Advanced</button>
+      <!-- Controls & Score -->
+      <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-b-xl rounded-tr-xl shadow-sm border border-slate-300 gap-4">
+        
+        <!-- Difficulty Selector -->
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <span class="text-sm font-bold text-slate-700 uppercase tracking-wider">Level:</span>
+          <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 w-full sm:w-auto" role="group" aria-label="Difficulty level">
+            <button onclick="app.setDifficulty('easy')" id="btn-easy" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md transition-colors bg-blue-900 text-white shadow" aria-pressed="true">Easy</button>
+            <button onclick="app.setDifficulty('medium')" id="btn-medium" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Medium</button>
+            <button onclick="app.setDifficulty('hard')" id="btn-hard" class="flex-1 px-4 py-1.5 text-sm font-semibold rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors" aria-pressed="false">Advanced</button>
+          </div>
         </div>
-      </div>
 
-      <!-- Score/Progress -->
-      <div class="text-sm font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-lg border border-slate-200" aria-live="polite">
-        Current Streak: <span id="streak-counter" class="text-blue-700 font-black text-lg">0</span>
-      </div>
+        <!-- Score/Progress -->
+        <div class="text-sm font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-lg border border-slate-200" aria-live="polite">
+          Current Streak: <span id="streak-counter" class="text-blue-700 font-black text-lg">0</span>
+        </div>
 
-    </div>
+      </div>
 
     <!-- Interactive Workspace -->
     <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-300 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -160,6 +170,37 @@
         </div>
       </div>
     </div>
+    
+    </div> <!-- Close Practice View -->
+
+    <!-- REVIEW VIEW (Definitions & Static SVGs) -->
+    <div id="review-view" class="hidden bg-white p-6 sm:p-8 rounded-b-xl rounded-tr-xl shadow-sm border border-slate-300">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Fundamental Operations</h2>
+        <p class="text-slate-600 font-medium mt-2">Review the formal definitions and visual representations of basic set theory concepts.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="review-container">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Transition Guide for Visual Matching Problems -->
+      <div class="mt-12 bg-indigo-50 border-l-4 border-indigo-500 p-6 sm:p-8 rounded-r-xl rounded-l-sm shadow-sm max-w-4xl mx-auto">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-950 flex items-center gap-2 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+          Taking the Leap to 3-Set Problems
+        </h3>
+        <p class="text-indigo-900 text-sm sm:text-base leading-relaxed font-medium">
+          Transitioning from basic two-set diagrams to complex three-set expressions might feel like a big jump, but you already have all the fundamental tools required! Think of the four definitions above as your core mathematical building blocks. 
+        </p>
+        <p class="text-indigo-900 text-sm sm:text-base leading-relaxed font-medium mt-3">
+          When you observe a shaded compound region, break it down. For example, if you see an expression like \((A \cup B) \cap C^c\), treat the union \((A \cup B)\) as a single "chunk". Then, look for where that entire chunk overlaps with the area outside of \(C\).
+        </p>
+        <p class="text-indigo-900 text-sm sm:text-base leading-relaxed font-medium mt-3">
+          Matching the right expression to the diagram is about process of elimination and logical deduction. Take your time, sketch the intermediate steps in your mind (or on paper) before selecting your final answer, and remember that analyzing mismatches is exactly how your brain builds new connections!
+        </p>
+      </div>
+    </div>
 
   </main>
 
@@ -179,7 +220,7 @@
       FRAME: '#1e293b'       // Slate 800
     };
 
-    const REGION_DESCRIPTIONS = {
+    const REGION_DESCRIPTIONS_3SET = {
       1: "the region exclusively inside A, outside B and C",
       2: "the intersection of A and B, outside C",
       3: "the region exclusively inside B, outside A and C",
@@ -190,14 +231,21 @@
       8: "the region outside all sets"
     };
 
+    const REGION_DESCRIPTIONS_2SET = {
+      1: "the region exclusively inside A, outside B",
+      2: "the intersection of A and B",
+      3: "the region exclusively inside B, outside A",
+      4: "the region outside all sets"
+    };
+
     const OP_DEFS = [
-      { trigger: '\\cup', name: 'Union', notation: '\\(A \\cup B = \\{x \\in U \\mid x \\in A \\text{ or } x \\in B\\}\\)', desc: 'The union combines all elements from the sets. If an element is in ANY of the sets involved, it belongs in the union.' },
-      { trigger: '\\cap', name: 'Intersection', notation: '\\(A \\cap B = \\{x \\in U \\mid x \\in A \\text{ and } x \\in B\\}\\)', desc: 'The intersection requires elements to be strictly in BOTH (or all) sets. Look for the overlapping regions where the conditions are met simultaneously.' },
-      { trigger: '^c', name: 'Complement', notation: '\\(A^c = \\{x \\in U \\mid x \\notin A\\}\\)', desc: 'The complement includes everything in the universal space that is NOT inside the specified set. Think of it as the strict "outside" of that set boundary.' },
-      { trigger: '-', name: 'Difference', notation: '\\(A - B = \\{x \\in A \\mid x \\notin B\\}\\)', desc: 'The difference removes any elements of the second set from the first. Start with the first set, and take away anything that also belongs to the second.' }
+      { trigger: '\\cup', name: 'Union', notation_left: '\\(A \\cup B =\\)', notation_right: '\\(\\{x \\in U \\mid x \\in A \\text{ or } x \\in B\\}\\)', desc: 'The union combines all elements from the sets. If an element is in ANY of the sets involved, it belongs in the union.' },
+      { trigger: '\\cap', name: 'Intersection', notation_left: '\\(A \\cap B =\\)', notation_right: '\\(\\{x \\in U \\mid x \\in A \\text{ and } x \\in B\\}\\)', desc: 'The intersection requires elements to be strictly in BOTH (or all) sets. Look for the overlapping regions where the conditions are met simultaneously.' },
+      { trigger: '^c', name: 'Complement', notation_left: '\\(A^c =\\)', notation_right: '\\(\\{x \\in U \\mid x \\notin A\\}\\)', desc: 'The complement includes everything in the universal space that is NOT inside the specified set. Think of it as the strict "outside" of that set boundary.' },
+      { trigger: '-', name: 'Difference', notation_left: '\\(A - B =\\)', notation_right: '\\(\\{x \\in A \\mid x \\notin B\\}\\)', desc: 'The difference removes any elements of the second set from the first. Start with the first set, and take away anything that also belongs to the second.' }
     ];
 
-    const QUESTION_BANK = {
+    const QUESTION_BANK_3SET = {
       easy: [
         { tex: "A", eval: (a,b,c) => a },
         { tex: "B", eval: (a,b,c) => b },
@@ -209,37 +257,94 @@
         { tex: "B \\cap C", eval: (a,b,c) => b && c }
       ],
       medium: [
-        { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b) },
-        { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c) },
+        { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
+        { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c), equivalent: "(A \\cap B) \\cup (A \\cap C) \\text{ (Distributive Property)}" },
         { tex: "(A \\cap B) \\cup C", eval: (a,b,c) => (a && b) || c },
-        { tex: "A^c \\cap B", eval: (a,b,c) => !a && b },
+        { tex: "A^c \\cap B", eval: (a,b,c) => !a && b, equivalent: "B - A \\text{ (Difference)}" },
         { tex: "A \\cup B \\cup C", eval: (a,b,c) => a || b || c },
         { tex: "A \\cap B \\cap C", eval: (a,b,c) => a && b && c },
-        { tex: "C - (A \\cup B)", eval: (a,b,c) => c && !(a || b) }
+        { tex: "C - (A \\cup B)", eval: (a,b,c) => c && !(a || b), equivalent: "C \\cap (A \\cup B)^c" }
       ],
       hard: [
-        { tex: "(B \\cup C) \\cap A^c", eval: (a,b,c) => (b || c) && !a },
-        { tex: "(A \\cup B) - C", eval: (a,b,c) => (a || b) && !c },
-        { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c },
+        { tex: "(B \\cup C) \\cap A^c", eval: (a,b,c) => (b || c) && !a, equivalent: "(B \\cup C) - A" },
+        { tex: "(A \\cup B) - C", eval: (a,b,c) => (a || b) && !c, equivalent: "(A \\cup B) \\cap C^c" },
+        { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c, equivalent: "(A \\cup B)^c \\cup C \\text{ (De Morgan's Law)}" },
         { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c) },
-        { tex: "(A \\cap B)^c \\cap C", eval: (a,b,c) => !(a && b) && c },
+        { tex: "(A \\cap B)^c \\cap C", eval: (a,b,c) => !(a && b) && c, equivalent: "C - (A \\cap B)" },
         { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c) },
-        { tex: "A - (B \\cap C)", eval: (a,b,c) => a && !(b && c) }
+        { tex: "A - (B \\cap C)", eval: (a,b,c) => a && !(b && c), equivalent: "A \\cap (B \\cap C)^c" }
+      ]
+    };
+
+    const QUESTION_BANK_2SET = {
+      easy: [
+        { tex: "A", eval: (a,b) => a },
+        { tex: "B", eval: (a,b) => b },
+        { tex: "A \\cup B", eval: (a,b) => a || b },
+        { tex: "A \\cap B", eval: (a,b) => a && b },
+        { tex: "A^c", eval: (a,b) => !a },
+        { tex: "B^c", eval: (a,b) => !b },
+        { tex: "A - B", eval: (a,b) => a && !b },
+        { tex: "B - A", eval: (a,b) => b && !a }
+      ],
+      medium: [
+        { tex: "(A \\cup B)^c", eval: (a,b) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
+        { tex: "(A \\cap B)^c", eval: (a,b) => !(a && b), equivalent: "A^c \\cup B^c \\text{ (De Morgan's Law)}" },
+        { tex: "A \\cap B^c", eval: (a,b) => a && !b, equivalent: "A - B \\text{ (Difference)}" },
+        { tex: "A \\cup B^c", eval: (a,b) => a || !b },
+        { tex: "A^c \\cup B", eval: (a,b) => !a || b },
+        { tex: "(A - B) \\cup (B - A)", eval: (a,b) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" }
+      ],
+      hard: [
+        { tex: "A^c \\cap B^c", eval: (a,b) => !a && !b, equivalent: "(A \\cup B)^c \\text{ (De Morgan's Law)}" }, 
+        { tex: "A^c \\cup B^c", eval: (a,b) => !a || !b, equivalent: "(A \\cap B)^c \\text{ (De Morgan's Law)}" }, 
+        { tex: "(A \\cap B) \\cup (A \\cup B)^c", eval: (a,b) => (a && b) || !(a || b) },
+        { tex: "A \\cap (B \\cup A^c)", eval: (a,b) => a && (b || !a), equivalent: "A \\cap B" },
+        { tex: "(A \\cup B) - (A \\cap B)", eval: (a,b) => (a || b) && !(a && b), equivalent: "(A - B) \\cup (B - A) \\text{ (Symmetric Difference)}" }
       ]
     };
 
     // --- State Management ---
     
     const app = {
+      mode: '3set', // '3set', '2set', or 'review'
       difficulty: 'easy',
-      targetQuestion: null,     // The expression dictating the shaded diagram
-      currentOptions: [],       // The 4 multiple choice options
-      selectedIndex: null,      // User's selected option index
-      correctIndex: null,       // Index of the correct answer
+      targetQuestion: null,
+      currentOptions: [],
+      selectedIndex: null,
+      correctIndex: null,
       streak: 0,
       
       init() {
-        this.nextQuestion();
+        this.setMode('3set');
+      },
+
+      setMode(mode) {
+        this.mode = mode;
+        
+        // Update Tabs Styling
+        const tabs = ['3set', '2set', 'review'];
+        tabs.forEach(t => {
+          const btn = document.getElementById(`tab-${t}`);
+          if (t === mode) {
+            btn.className = "px-5 py-2.5 font-bold rounded-t-xl transition-colors bg-white text-blue-900 border-t-2 border-l-2 border-r-2 border-slate-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]";
+          } else {
+            btn.className = "px-5 py-2.5 font-bold rounded-t-xl transition-colors bg-slate-200 text-slate-600 hover:bg-slate-300 border-b-2 border-slate-300 cursor-pointer";
+          }
+        });
+
+        // Toggle Views
+        if (mode === 'review') {
+          document.getElementById('practice-view').classList.add('hidden');
+          document.getElementById('review-view').classList.remove('hidden');
+          this.renderReview();
+        } else {
+          document.getElementById('practice-view').classList.remove('hidden');
+          document.getElementById('review-view').classList.add('hidden');
+          this.streak = 0;
+          this.updateStreakUI();
+          this.nextQuestion();
+        }
       },
 
       setDifficulty(level) {
@@ -262,7 +367,7 @@
       },
 
       nextQuestion() {
-        const bank = QUESTION_BANK[this.difficulty];
+        const bank = this.mode === '3set' ? QUESTION_BANK_3SET[this.difficulty] : QUESTION_BANK_2SET[this.difficulty];
         
         // Pick a target question
         let tIndex;
@@ -274,12 +379,37 @@
         this.selectedIndex = null;
         this.hideFeedback();
         
-        // Gather 4 distinct distractors from the same bank to create 5 total options
-        let availableDistractors = bank.filter((_, i) => i !== tIndex);
-        availableDistractors.sort(() => 0.5 - Math.random());
-        const chosenDistractors = availableDistractors.slice(0, 4);
+        // Ensure mathematically distinct distractors (so there are never two right answers)
+        const targetRegionsStr = JSON.stringify(this.getCorrectRegions(this.targetQuestion.eval).sort());
+        
+        let availableDistractors = bank.filter((q, i) => {
+          if (i === tIndex) return false;
+          const qRegionsStr = JSON.stringify(this.getCorrectRegions(q.eval).sort());
+          return qRegionsStr !== targetRegionsStr; 
+        });
 
-        // Build and shuffle options array
+        availableDistractors.sort(() => 0.5 - Math.random());
+        let chosenDistractors = availableDistractors.slice(0, 4);
+
+        // Fallback: If bank doesn't have 4 mathematically distinct distractors, borrow from other banks
+        if (chosenDistractors.length < 4) {
+          const allBanks = this.mode === '3set' ? 
+              [...QUESTION_BANK_3SET.easy, ...QUESTION_BANK_3SET.medium, ...QUESTION_BANK_3SET.hard] :
+              [...QUESTION_BANK_2SET.easy, ...QUESTION_BANK_2SET.medium, ...QUESTION_BANK_2SET.hard];
+          
+          let extraDistractors = allBanks.filter(q => {
+              if (q.tex === this.targetQuestion.tex || chosenDistractors.some(d => d.tex === q.tex)) return false;
+              const qRegionsStr = JSON.stringify(this.getCorrectRegions(q.eval).sort());
+              return qRegionsStr !== targetRegionsStr;
+          });
+          extraDistractors.sort(() => 0.5 - Math.random());
+          
+          while (chosenDistractors.length < 4 && extraDistractors.length > 0) {
+              chosenDistractors.push(extraDistractors.pop());
+          }
+        }
+
+        // Build and shuffle exactly 5 options
         this.currentOptions = [this.targetQuestion, ...chosenDistractors];
         this.currentOptions.sort(() => 0.5 - Math.random());
         this.correctIndex = this.currentOptions.indexOf(this.targetQuestion);
@@ -329,14 +459,21 @@
 
       getCorrectRegions(evalFunc) {
         const regions = [];
-        if (evalFunc(true, false, false)) regions.push(1); 
-        if (evalFunc(true, true, false))  regions.push(2); 
-        if (evalFunc(false, true, false)) regions.push(3); 
-        if (evalFunc(true, true, true))   regions.push(4); 
-        if (evalFunc(true, false, true))  regions.push(5); 
-        if (evalFunc(false, true, true))  regions.push(6); 
-        if (evalFunc(false, false, true)) regions.push(7); 
-        if (evalFunc(false, false, false))regions.push(8); 
+        if (this.mode === '3set') {
+          if (evalFunc(true, false, false)) regions.push(1); 
+          if (evalFunc(true, true, false))  regions.push(2); 
+          if (evalFunc(false, true, false)) regions.push(3); 
+          if (evalFunc(true, true, true))   regions.push(4); 
+          if (evalFunc(true, false, true))  regions.push(5); 
+          if (evalFunc(false, true, true))  regions.push(6); 
+          if (evalFunc(false, false, true)) regions.push(7); 
+          if (evalFunc(false, false, false))regions.push(8);
+        } else {
+          if (evalFunc(true, false)) regions.push(1); 
+          if (evalFunc(true, true))  regions.push(2); 
+          if (evalFunc(false, true)) regions.push(3); 
+          if (evalFunc(false, false))regions.push(4);
+        }
         return regions;
       },
 
@@ -350,7 +487,20 @@
           // Success
           this.streak++;
           this.updateStreakUI();
-          this.showFeedback('success', "Spot On! \uD83C\uDF1F", "You correctly identified the mathematical logic that produces this shaded diagram. Excellent deductive work!");
+          
+          let successDetails = "";
+          
+          // Show simplified equivalence on advanced questions if one exists
+          if (this.targetQuestion.equivalent) {
+            successDetails = `
+              <div class="mt-3 text-emerald-950 text-sm font-medium bg-emerald-100/60 p-3.5 rounded-lg border border-emerald-300 shadow-sm">
+                <strong>💡 Fun Fact:</strong> The expression you chose, \\(${this.targetQuestion.tex}\\), can also be written as <strong>\\(${this.targetQuestion.equivalent}\\)</strong>.<br><br>
+                This is a great example of logical equivalence—showing how different set operations can describe the exact same region!
+              </div>
+            `;
+          }
+          
+          this.showFeedback('success', "Spot On! \uD83C\uDF1F", "You correctly identified the mathematical logic that produces this shaded diagram. Excellent deductive work!", successDetails);
         } else {
           // Incorrect: Employ Growth Mindset & Reverse Productive Struggle Logic
           this.streak = 0;
@@ -373,7 +523,7 @@
             detailsHtml += `<div class="bg-white/70 p-4 rounded-xl border border-rose-200 shadow-sm mb-4">`;
             detailsHtml += `<p class="font-extrabold text-rose-950 mb-2 uppercase text-xs tracking-wider">Definitions for the Expression You Chose:</p><ul class="list-none space-y-3">`;
             opsInPlay.forEach(op => {
-              detailsHtml += `<li><span class="font-bold text-rose-900">${op.name}:</span> ${op.notation}<br><span class="opacity-80 block mt-1">${op.desc}</span></li>`;
+              detailsHtml += `<li><span class="font-bold text-rose-900">${op.name}:</span> ${op.notation_left} ${op.notation_right}<br><span class="opacity-80 block mt-1">${op.desc}</span></li>`;
             });
             detailsHtml += `</ul></div>`;
           }
@@ -387,16 +537,18 @@
           // Extra: Regions NOT shaded in the diagram, but WOULD BE shaded by the user's expression
           const extra = userIds.filter(id => !correctIds.includes(id));
 
+          const regDesc = this.mode === '3set' ? REGION_DESCRIPTIONS_3SET : REGION_DESCRIPTIONS_2SET;
+
           detailsHtml += `<p class="font-extrabold text-rose-950 mt-4 mb-2 uppercase text-xs tracking-wider">Visual Clues (Productive Struggle):</p><ul class="list-disc pl-5 space-y-2 opacity-90">`;
           
           const hints = [];
           if (missing.length > 0) {
              const hintReg = missing[Math.floor(Math.random() * missing.length)];
-             hints.push(`Look at <b class="text-rose-950 font-bold">${REGION_DESCRIPTIONS[hintReg]}</b>. It is actively shaded in the diagram, but the expression you chose <em>leaves it out</em>.`);
+             hints.push(`Look at <b>${regDesc[hintReg]}</b>. It is actively shaded in the diagram, but the expression you chose <em>leaves it out</em>.`);
           }
           if (extra.length > 0) {
              const hintReg = extra[Math.floor(Math.random() * extra.length)];
-             hints.push(`The expression you selected would include <b class="text-rose-950 font-bold">${REGION_DESCRIPTIONS[hintReg]}</b>, but notice that this region is completely blank in the diagram.`);
+             hints.push(`The expression you selected would include <b>${regDesc[hintReg]}</b>, but notice that this region is completely blank in the diagram.`);
           }
           
           hints.forEach(h => {
@@ -449,119 +601,248 @@
         document.getElementById('feedback-panel').classList.remove('animate-enter', 'block');
       },
 
-      // --- SVG Construction ---
+      // --- Rendering Logic ---
       
       renderSVG() {
         const container = document.getElementById('venn-container');
-        
-        const A = { cx: 115, cy: 110, r: 65 };
-        const B = { cx: 185, cy: 110, r: 65 };
-        const C = { cx: 150, cy: 170, r: 65 };
-        
-        const masks = `
-          <defs>
-            <clipPath id="cpA"><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}"/></clipPath>
-            <clipPath id="cpB"><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}"/></clipPath>
-            <clipPath id="cpC"><circle cx="${C.cx}" cy="${C.cy}" r="${C.r}"/></clipPath>
+        let svgMarkup = '';
 
-            <mask id="m1">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
-            </mask>
+        if (this.mode === '3set') {
+          const A = { cx: 115, cy: 110, r: 65 };
+          const B = { cx: 185, cy: 110, r: 65 };
+          const C = { cx: 150, cy: 170, r: 65 };
+          
+          const masks = `
+            <defs>
+              <clipPath id="cpA"><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}"/></clipPath>
+              <clipPath id="cpB"><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}"/></clipPath>
+              <clipPath id="cpC"><circle cx="${C.cx}" cy="${C.cy}" r="${C.r}"/></clipPath>
 
-            <mask id="m2">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff" clip-path="url(#cpA)"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
-            </mask>
-
-            <mask id="m3">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff"/>
-              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
-            </mask>
-
-            <mask id="m4">
-              <rect width="320" height="280" fill="#000"/>
-              <g clip-path="url(#cpA)">
+              <mask id="m1">
+                <rect width="320" height="280" fill="#000"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+              </mask>
+              <mask id="m2">
+                <rect width="320" height="280" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff" clip-path="url(#cpA)"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+              </mask>
+              <mask id="m3">
+                <rect width="320" height="280" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+              </mask>
+              <mask id="m4">
+                <rect width="320" height="280" fill="#000"/>
+                <g clip-path="url(#cpA)">
+                  <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpB)"/>
+                </g>
+              </mask>
+              <mask id="m5">
+                <rect width="320" height="280" fill="#000"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpA)"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              </mask>
+              <mask id="m6">
+                <rect width="320" height="280" fill="#000"/>
                 <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpB)"/>
-              </g>
-            </mask>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+              </mask>
+              <mask id="m7">
+                <rect width="320" height="280" fill="#000"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              </mask>
+              <mask id="m8">
+                <rect width="320" height="280" fill="#fff"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+                <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
+              </mask>
 
-            <mask id="m5">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpA)"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
-            </mask>
+              <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="0" y2="8" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" />
+              </pattern>
+            </defs>
+          `;
 
-            <mask id="m6">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff" clip-path="url(#cpB)"/>
-              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
-            </mask>
+          const correctRegions = new Set(this.getCorrectRegions(this.targetQuestion.eval));
 
-            <mask id="m7">
-              <rect width="320" height="280" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#fff"/>
-              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
-            </mask>
-
-            <mask id="m8">
-              <rect width="320" height="280" fill="#fff"/>
-              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
-              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
-              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="#000"/>
-            </mask>
-
-            <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="0" x2="0" y2="8" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" />
-            </pattern>
-          </defs>
-        `;
-
-        // Retrieve exactly which regions should be shaded for this target question
-        const correctRegions = new Set(this.getCorrectRegions(this.targetQuestion.eval));
-
-        let shadedLayers = '';
-        for (let i = 1; i <= 8; i++) {
-          if (correctRegions.has(i)) {
-            shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="${COLORS.SHADE}" mask="url(#m${i})"/>`;
-            shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="url(#hatch)" mask="url(#m${i})"/>`;
+          let shadedLayers = '';
+          for (let i = 1; i <= 8; i++) {
+            if (correctRegions.has(i)) {
+              shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="${COLORS.SHADE}" mask="url(#m${i})"/>`;
+              shadedLayers += `<rect x="25" y="30" width="260" height="235" rx="6" fill="url(#hatch)" mask="url(#m${i})"/>`;
+            }
           }
+
+          svgMarkup = `
+            <svg viewBox="0 0 320 280" role="img" aria-label="A diagram with specific regions shaded corresponding to a 3-set theory expression">
+              ${masks}
+
+              <!-- Universal Set Boundary -->
+              <rect x="25" y="30" width="260" height="235" rx="6" fill="#ffffff" stroke="${COLORS.FRAME}" stroke-width="2"/>
+              <text x="292" y="55" font-size="18" font-weight="800" fill="${COLORS.FRAME}">U</text>
+
+              <!-- Active Shaded Regions Layer -->
+              <g id="shading-group">
+                ${shadedLayers}
+              </g>
+              
+              <!-- Set Boundaries -->
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="none" stroke="${COLORS.STROKE_A}" stroke-width="2.5"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="none" stroke="${COLORS.STROKE_B}" stroke-width="2.5" />
+              <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="none" stroke="${COLORS.STROKE_C}" stroke-width="2.5" />
+              
+              <!-- Set Labels -->
+              <text x="60" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_A}" paint-order="stroke" stroke="#ffffff" stroke-width="5">A</text>
+              <text x="240" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_B}" paint-order="stroke" stroke="#ffffff" stroke-width="5">B</text>
+              <text x="150" y="255" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_C}" paint-order="stroke" stroke="#ffffff" stroke-width="5">C</text>
+            </svg>
+          `;
+        } else if (this.mode === '2set') {
+          const A = { cx: 125, cy: 135, r: 75 };
+          const B = { cx: 215, cy: 135, r: 75 };
+          
+          const masks = `
+            <defs>
+              <clipPath id="cpA_2"><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}"/></clipPath>
+              
+              <mask id="m1_2">
+                <rect width="340" height="250" fill="#000"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              </mask>
+              <mask id="m2_2">
+                <rect width="340" height="250" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff" clip-path="url(#cpA_2)"/>
+              </mask>
+              <mask id="m3_2">
+                <rect width="340" height="250" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+              </mask>
+              <mask id="m4_2">
+                <rect width="340" height="250" fill="#fff"/>
+                <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>
+                <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>
+              </mask>
+
+              <pattern id="hatch_2" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="0" y2="8" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" />
+              </pattern>
+            </defs>
+          `;
+
+          const correctRegions = new Set(this.getCorrectRegions(this.targetQuestion.eval));
+
+          let shadedLayers = '';
+          for (let i = 1; i <= 4; i++) {
+            if (correctRegions.has(i)) {
+              shadedLayers += `<rect x="25" y="30" width="290" height="200" rx="6" fill="${COLORS.SHADE}" mask="url(#m${i}_2)"/>`;
+              shadedLayers += `<rect x="25" y="30" width="290" height="200" rx="6" fill="url(#hatch_2)" mask="url(#m${i}_2)"/>`;
+            }
+          }
+
+          svgMarkup = `
+            <svg viewBox="0 0 340 250" role="img" aria-label="A diagram with specific regions shaded corresponding to a 2-set theory expression">
+              ${masks}
+              <rect x="25" y="30" width="290" height="200" rx="6" fill="#ffffff" stroke="${COLORS.FRAME}" stroke-width="2"/>
+              <text x="322" y="55" font-size="18" font-weight="800" fill="${COLORS.FRAME}">U</text>
+              <g id="shading-group">${shadedLayers}</g>
+              
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="none" stroke="${COLORS.STROKE_A}" stroke-width="2.5"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="none" stroke="${COLORS.STROKE_B}" stroke-width="2.5" />
+              
+              <text x="60" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_A}" paint-order="stroke" stroke="#ffffff" stroke-width="5">A</text>
+              <text x="280" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_B}" paint-order="stroke" stroke="#ffffff" stroke-width="5">B</text>
+            </svg>
+          `;
         }
 
-        const svgMarkup = `
-          <svg viewBox="0 0 320 280" role="img" aria-label="A diagram with specific regions shaded corresponding to a set theory expression">
-            ${masks}
-
-            <!-- Universal Set Boundary -->
-            <rect x="25" y="30" width="260" height="235" rx="6" fill="#ffffff" stroke="${COLORS.FRAME}" stroke-width="2"/>
-            
-            <!-- U Label -->
-            <text x="292" y="55" font-size="18" font-weight="800" fill="${COLORS.FRAME}">U</text>
-
-            <!-- Active Shaded Regions Layer -->
-            <g id="shading-group">
-              ${shadedLayers}
-            </g>
-            
-            <!-- Set Boundaries -->
-            <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="none" stroke="${COLORS.STROKE_A}" stroke-width="2.5"/>
-            <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="none" stroke="${COLORS.STROKE_B}" stroke-width="2.5" />
-            <circle cx="${C.cx}" cy="${C.cy}" r="${C.r}" fill="none" stroke="${COLORS.STROKE_C}" stroke-width="2.5" />
-            
-            <!-- Set Labels -->
-            <text x="60" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_A}" paint-order="stroke" stroke="#ffffff" stroke-width="5">A</text>
-            <text x="240" y="55" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_B}" paint-order="stroke" stroke="#ffffff" stroke-width="5">B</text>
-            <text x="150" y="255" text-anchor="middle" font-weight="800" font-size="20" fill="${COLORS.STROKE_C}" paint-order="stroke" stroke="#ffffff" stroke-width="5">C</text>
-          </svg>
-        `;
-
         container.innerHTML = svgMarkup;
+      },
+
+      renderReview() {
+        const container = document.getElementById('review-container');
+        
+        const generateReviewSVG = (type) => {
+          const A = { cx: 115, cy: 90, r: 55 };
+          const B = { cx: 185, cy: 90, r: 55 };
+          
+          let mask = '';
+          if (type === 'union') {
+            mask = `<circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff"/>`;
+          } else if (type === 'intersection') {
+            mask = `<clipPath id="cpr_${type}"><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}"/></clipPath><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#fff" clip-path="url(#cpr_${type})"/>`;
+          } else if (type === 'complement') {
+            mask = `<rect width="315" height="180" fill="#fff"/><circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#000"/>`;
+          } else if (type === 'difference') {
+            mask = `<circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="#fff"/><circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="#000"/>`;
+          }
+
+          return `
+            <svg viewBox="0 0 315 180" class="w-full max-w-[280px] bg-white rounded-xl shadow-sm border border-slate-200 mt-2 mb-2">
+              <defs>
+                <mask id="m_${type}">
+                  <rect width="315" height="180" fill="#000"/>
+                  ${mask}
+                </mask>
+                <pattern id="hatch_rev_${type}" width="6" height="6" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="6" stroke="#d97706" stroke-width="1.25" stroke-opacity="0.4" />
+                </pattern>
+              </defs>
+              <rect x="15" y="15" width="270" height="150" rx="6" fill="#ffffff" stroke="${COLORS.FRAME}" stroke-width="2"/>
+              <text x="292" y="46" font-size="14" font-weight="800" fill="${COLORS.FRAME}">U</text>
+              
+              <rect x="15" y="15" width="270" height="150" rx="6" fill="${COLORS.SHADE}" mask="url(#m_${type})"/>
+              <rect x="15" y="15" width="270" height="150" rx="6" fill="url(#hatch_rev_${type})" mask="url(#m_${type})"/>
+              
+              <circle cx="${A.cx}" cy="${A.cy}" r="${A.r}" fill="none" stroke="${COLORS.STROKE_A}" stroke-width="2.5"/>
+              <circle cx="${B.cx}" cy="${B.cy}" r="${B.r}" fill="none" stroke="${COLORS.STROKE_B}" stroke-width="2.5"/>
+              
+              <text x="60" y="46" text-anchor="middle" font-weight="800" font-size="16" fill="${COLORS.STROKE_A}" paint-order="stroke" stroke="#ffffff" stroke-width="4">A</text>
+              <text x="240" y="46" text-anchor="middle" font-weight="800" font-size="16" fill="${COLORS.STROKE_B}" paint-order="stroke" stroke="#ffffff" stroke-width="4">B</text>
+            </svg>
+          `;
+        };
+
+        let html = '';
+        const opKeys = ['union', 'intersection', 'complement', 'difference'];
+        
+        OP_DEFS.forEach((op, index) => {
+          const type = opKeys[index];
+          html += `
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between h-full hover:shadow-md transition-shadow">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 border-b-2 border-slate-200 pb-2 mb-4 uppercase tracking-wider">${op.name}</h3>
+                
+                <div class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-[1.1rem] sm:text-lg lg:text-xl font-bold text-blue-950 text-center py-4 px-3 bg-white rounded-xl border border-slate-200 shadow-sm mb-5 w-full">
+                  <span class="whitespace-nowrap">${op.notation_left}</span>
+                  <span class="whitespace-nowrap">${op.notation_right}</span>
+                </div>
+                
+                <p class="text-sm text-slate-700 font-medium leading-relaxed">${op.desc}</p>
+              </div>
+              <div class="mt-6 flex flex-col items-center">
+                ${generateReviewSVG(type)}
+                <p class="text-[11px] sm:text-xs text-center font-bold text-slate-500 mt-4 uppercase tracking-wide">
+                  Visual representing <span class="text-amber-600 font-black">amber shaded</span> region
+                </p>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+        
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([container]).catch(err => console.warn('MathJax error:', err));
+        }
       }
     };
 
