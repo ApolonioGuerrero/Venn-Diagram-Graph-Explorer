@@ -4,6 +4,8 @@ A responsive, client-side web application designed to help students master set t
 
 Built with an emphasis on **Growth Mindset** and **Productive Struggle**, this tool doesn't just tell students when they are wrong; it provides targeted visual clues and conceptual definitions to help them arrive at the correct answer on their own.
 
+![https://github.com/ApolonioGuerrero/Venn-Diagram-Graph-Explorer/blob/1c9a078454624a2ff7fa898d785d06f10c9dd8bd/Venn%20Diagram%20Graph%20Explorer.png](https://github.com/ApolonioGuerrero/Venn-Diagram-Graph-Explorer/blob/1c9a078454624a2ff7fa898d785d06f10c9dd8bd/Venn%20Diagram%20Graph%20Explorer.png)
+
 ## ✨ Features
 
 *   **Dynamic SVG Shading:** Uses advanced SVG masking and clipping paths to accurately render complex set intersections without pixelation.
