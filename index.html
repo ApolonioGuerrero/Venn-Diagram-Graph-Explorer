@@ -251,28 +251,68 @@
         { tex: "B", eval: (a,b,c) => b },
         { tex: "C", eval: (a,b,c) => c },
         { tex: "A \\cup B", eval: (a,b,c) => a || b },
+        { tex: "A \\cup C", eval: (a,b,c) => a || c },
+        { tex: "B \\cup C", eval: (a,b,c) => b || c },
         { tex: "A \\cap B", eval: (a,b,c) => a && b },
+        { tex: "A \\cap C", eval: (a,b,c) => a && c },
+        { tex: "B \\cap C", eval: (a,b,c) => b && c },
+        { tex: "A^c", eval: (a,b,c) => !a },
+        { tex: "B^c", eval: (a,b,c) => !b },
         { tex: "C^c", eval: (a,b,c) => !c },
-        { tex: "A - B", eval: (a,b,c) => a && !b },
-        { tex: "B \\cap C", eval: (a,b,c) => b && c }
+        { tex: "\\emptyset", eval: (a,b,c) => false, equivalent: "A \\cap A^c \\text{ (The Empty Set)}" },
+        { tex: "U", eval: (a,b,c) => true, equivalent: "A \\cup A^c \\text{ (The Universal Set)}" }
       ],
       medium: [
         { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
+        { tex: "(B \\cup C)^c", eval: (a,b,c) => !(b || c), equivalent: "B^c \\cap C^c \\text{ (De Morgan's Law)}" },
+        { tex: "(A \\cap B)^c", eval: (a,b,c) => !(a && b), equivalent: "A^c \\cup B^c \\text{ (De Morgan's Law)}" },
         { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c), equivalent: "(A \\cap B) \\cup (A \\cap C) \\text{ (Distributive Property)}" },
+        { tex: "A \\cup (B \\cap C)", eval: (a,b,c) => a || (b && c), equivalent: "(A \\cup B) \\cap (A \\cup C) \\text{ (Distributive Property)}" },
         { tex: "(A \\cap B) \\cup C", eval: (a,b,c) => (a && b) || c },
-        { tex: "A^c \\cap B", eval: (a,b,c) => !a && b, equivalent: "B - A \\text{ (Difference)}" },
+        { tex: "(A \\cup B) \\cap C", eval: (a,b,c) => (a || b) && c, equivalent: "(A \\cap C) \\cup (B \\cap C)" },
         { tex: "A \\cup B \\cup C", eval: (a,b,c) => a || b || c },
         { tex: "A \\cap B \\cap C", eval: (a,b,c) => a && b && c },
-        { tex: "C - (A \\cup B)", eval: (a,b,c) => c && !(a || b), equivalent: "C \\cap (A \\cup B)^c" }
+        { tex: "C - (A \\cup B)", eval: (a,b,c) => c && !(a || b), equivalent: "C \\cap (A \\cup B)^c" },
+        { tex: "A - (B \\cup C)", eval: (a,b,c) => a && !(b || c), equivalent: "A \\cap B^c \\cap C^c" },
+        { tex: "B - (A \\cup C)", eval: (a,b,c) => b && !(a || c), equivalent: "B \\cap A^c \\cap C^c" },
+        { tex: "(A \\cup B) - C", eval: (a,b,c) => (a || b) && !c, equivalent: "(A \\cup B) \\cap C^c" },
+        { tex: "A - (B \\cap C)", eval: (a,b,c) => a && !(b && c), equivalent: "A \\cap (B \\cap C)^c" },
+        { tex: "(A \\cap B) - C", eval: (a,b,c) => (a && b) && !c, equivalent: "A \\cap B \\cap C^c" },
+        { tex: "(B \\cap C) - A", eval: (a,b,c) => (b && c) && !a, equivalent: "A^c \\cap (B \\cap C)" },
+        { tex: "(A \\cap C) - B", eval: (a,b,c) => (a && c) && !b, equivalent: "(A \\cap C) \\cap B^c" },
+        { tex: "A - B", eval: (a,b,c) => a && !b, equivalent: "A \\cap B^c" },
+        { tex: "B - A", eval: (a,b,c) => b && !a, equivalent: "B \\cap A^c" },
+        { tex: "C - A", eval: (a,b,c) => c && !a, equivalent: "C \\cap A^c" },
+        { tex: "A^c \\cup B", eval: (a,b,c) => !a || b, equivalent: "(A - B)^c" },
+        { tex: "A \\cup B^c", eval: (a,b,c) => a || !b, equivalent: "(B - A)^c" },
+        { tex: "(A - B) \\cup C", eval: (a,b,c) => (a && !b) || c },
+        { tex: "(A \\cap B) \\cup (C - A)", eval: (a,b,c) => (a && b) || (c && !a) }
       ],
       hard: [
-        { tex: "(B \\cup C) \\cap A^c", eval: (a,b,c) => (b || c) && !a, equivalent: "(B \\cup C) - A" },
-        { tex: "(A \\cup B) - C", eval: (a,b,c) => (a || b) && !c, equivalent: "(A \\cup B) \\cap C^c" },
+        { tex: "(B \\cup C) - A", eval: (a,b,c) => (b || c) && !a, equivalent: "(B \\cup C) \\cap A^c" },
         { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c, equivalent: "(A \\cup B)^c \\cup C \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c) },
+        { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c), equivalent: "\\text{Elements in at least TWO sets}" },
+        { tex: "(A \\cup B \\cup C) - (A \\cap B \\cap C)", eval: (a,b,c) => (a || b || c) && !(a && b && c), equivalent: "\\text{Elements in at most TWO sets}" },
+        { tex: "(A \\cap B \\cap C)^c", eval: (a,b,c) => !(a && b && c), equivalent: "A^c \\cup B^c \\cup C^c \\text{ (De Morgan's Law)}" },
+        { tex: "(A \\cup B \\cup C)^c", eval: (a,b,c) => !(a || b || c), equivalent: "A^c \\cap B^c \\cap C^c \\text{ (De Morgan's Law)}" },
+        { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c), equivalent: "\\text{Outside region } \\cup \\text{ Center region}" },
+        { tex: "(A - B) \\cup (B - A)", eval: (a,b,c) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" },
+        { tex: "(A \\cup B \\cup C) - ((A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C))", eval: (a,b,c) => (a||b||c) && !((a&&b) || (b&&c) || (a&&c)), equivalent: "\\text{Elements in EXACTLY ONE set}" },
+        { tex: "A - (B - C)", eval: (a,b,c) => a && !(b && !c), equivalent: "(A - B) \\cup (A \\cap C)" },
+        { tex: "(A \\cap B) \\cup (A^c \\cap B^c)", eval: (a,b,c) => (a && b) || (!a && !b), equivalent: "\\text{Complement of the Symmetric Difference}" },
+        { tex: "A \\cup (B - C)", eval: (a,b,c) => a || (b && !c) },
+        { tex: "(A^c \\cap B^c) \\cup (A \\cap B)", eval: (a,b,c) => (!a && !b) || (a && b), equivalent: "((A - B) \\cup (B - A))^c" },
+        { tex: "(A \\cup B^c) \\cap C", eval: (a,b,c) => (a || !b) && c },
+        { tex: "A \\cup (B \\cap C)^c", eval: (a,b,c) => a || !(b && c), equivalent: "A \\cup B^c \\cup C^c" },
+        { tex: "C^c \\cup (A \\cap B)", eval: (a,b,c) => !c || (a && b) },
+        { tex: "(A \\cup B) - (A \\cap B \\cap C)", eval: (a,b,c) => (a || b) && !(a && b && c) },
         { tex: "(A \\cap B)^c \\cap C", eval: (a,b,c) => !(a && b) && c, equivalent: "C - (A \\cap B)" },
-        { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c) },
-        { tex: "A - (B \\cap C)", eval: (a,b,c) => a && !(b && c), equivalent: "A \\cap (B \\cap C)^c" }
+        { tex: "(A \\cup B)^c \\cup (A \\cap B)", eval: (a,b,c) => !(a || b) || (a && b) },
+        { tex: "A \\cup (B \\cup C)^c", eval: (a,b,c) => a || !(b || c), equivalent: "A \\cup (B^c \\cap C^c)" },
+        { tex: "(A \\cap B \\cap C) \\cup (A \\cup B \\cup C)^c", eval: (a,b,c) => (a && b && c) || !(a || b || c) },
+        { tex: "A \\cap (B \\cup C^c)", eval: (a,b,c) => a && (b || !c) },
+        { tex: "B \\cap (A^c \\cup C)", eval: (a,b,c) => b && (!a || c) },
+        { tex: "(A \\cap B^c) \\cup (A^c \\cap B) \\cup (A^c \\cap B^c \\cap C)", eval: (a,b,c) => (a && !b) || (!a && b) || (!a && !b && c) }
       ]
     };
 
@@ -284,23 +324,20 @@
         { tex: "A \\cap B", eval: (a,b) => a && b },
         { tex: "A^c", eval: (a,b) => !a },
         { tex: "B^c", eval: (a,b) => !b },
-        { tex: "A - B", eval: (a,b) => a && !b },
-        { tex: "B - A", eval: (a,b) => b && !a }
+        { tex: "A - B", eval: (a,b) => a && !b, equivalent: "A \\cap B^c" },
+        { tex: "B - A", eval: (a,b) => b && !a, equivalent: "B \\cap A^c" }
       ],
       medium: [
+        { tex: "\\emptyset", eval: (a,b) => false, equivalent: "A \\cap A^c \\text{ (The Empty Set)}" },
+        { tex: "U", eval: (a,b) => true, equivalent: "A \\cup A^c \\text{ (The Universal Set)}" },
         { tex: "(A \\cup B)^c", eval: (a,b) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
         { tex: "(A \\cap B)^c", eval: (a,b) => !(a && b), equivalent: "A^c \\cup B^c \\text{ (De Morgan's Law)}" },
-        { tex: "A \\cap B^c", eval: (a,b) => a && !b, equivalent: "A - B \\text{ (Difference)}" },
-        { tex: "A \\cup B^c", eval: (a,b) => a || !b },
-        { tex: "A^c \\cup B", eval: (a,b) => !a || b },
-        { tex: "(A - B) \\cup (B - A)", eval: (a,b) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" }
+        { tex: "A \\cup B^c", eval: (a,b) => a || !b, equivalent: "(B - A)^c" },
+        { tex: "A^c \\cup B", eval: (a,b) => !a || b, equivalent: "(A - B)^c" }
       ],
       hard: [
-        { tex: "A^c \\cap B^c", eval: (a,b) => !a && !b, equivalent: "(A \\cup B)^c \\text{ (De Morgan's Law)}" }, 
-        { tex: "A^c \\cup B^c", eval: (a,b) => !a || !b, equivalent: "(A \\cap B)^c \\text{ (De Morgan's Law)}" }, 
-        { tex: "(A \\cap B) \\cup (A \\cup B)^c", eval: (a,b) => (a && b) || !(a || b) },
-        { tex: "A \\cap (B \\cup A^c)", eval: (a,b) => a && (b || !a), equivalent: "A \\cap B" },
-        { tex: "(A \\cup B) - (A \\cap B)", eval: (a,b) => (a || b) && !(a && b), equivalent: "(A - B) \\cup (B - A) \\text{ (Symmetric Difference)}" }
+        { tex: "(A - B) \\cup (B - A)", eval: (a,b) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" },
+        { tex: "(A \\cap B) \\cup (A \\cup B)^c", eval: (a,b) => (a && b) || !(a || b), equivalent: "((A - B) \\cup (B - A))^c \\text{ (Complement of Sym. Diff.)}" }
       ]
     };
 
