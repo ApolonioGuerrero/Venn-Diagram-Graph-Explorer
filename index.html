@@ -262,15 +262,15 @@
         { tex: "A^c", eval: (a,b,c) => !a },
         { tex: "B^c", eval: (a,b,c) => !b },
         { tex: "C^c", eval: (a,b,c) => !c },
-        { tex: "\\emptyset", eval: (a,b,c) => false, equivalent: "A \\cap A^c \\text{ (The Empty Set)}" },
-        { tex: "U", eval: (a,b,c) => true, equivalent: "A \\cup A^c \\text{ (The Universal Set)}" }
+        { tex: "\\emptyset", eval: (a,b,c) => false, equivalent: "A \\cap A^c", desc: "The Empty Set" },
+        { tex: "U", eval: (a,b,c) => true, equivalent: "A \\cup A^c", desc: "The Universal Set" }
       ],
       medium: [
-        { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
-        { tex: "(B \\cup C)^c", eval: (a,b,c) => !(b || c), equivalent: "B^c \\cap C^c \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cap B)^c", eval: (a,b,c) => !(a && b), equivalent: "A^c \\cup B^c \\text{ (De Morgan's Law)}" },
-        { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c), equivalent: "(A \\cap B) \\cup (A \\cap C) \\text{ (Distributive Property)}" },
-        { tex: "A \\cup (B \\cap C)", eval: (a,b,c) => a || (b && c), equivalent: "(A \\cup B) \\cap (A \\cup C) \\text{ (Distributive Property)}" },
+        { tex: "(A \\cup B)^c", eval: (a,b,c) => !(a || b), equivalent: "A^c \\cap B^c", desc: "De Morgan's Law" },
+        { tex: "(B \\cup C)^c", eval: (a,b,c) => !(b || c), equivalent: "B^c \\cap C^c", desc: "De Morgan's Law" },
+        { tex: "(A \\cap B)^c", eval: (a,b,c) => !(a && b), equivalent: "A^c \\cup B^c", desc: "De Morgan's Law" },
+        { tex: "A \\cap (B \\cup C)", eval: (a,b,c) => a && (b || c), equivalent: "(A \\cap B) \\cup (A \\cap C)", desc: "Distributive Property" },
+        { tex: "A \\cup (B \\cap C)", eval: (a,b,c) => a || (b && c), equivalent: "(A \\cup B) \\cap (A \\cup C)", desc: "Distributive Property" },
         { tex: "(A \\cap B) \\cup C", eval: (a,b,c) => (a && b) || c },
         { tex: "(A \\cup B) \\cap C", eval: (a,b,c) => (a || b) && c, equivalent: "(A \\cap C) \\cup (B \\cap C)" },
         { tex: "A \\cup B \\cup C", eval: (a,b,c) => a || b || c },
@@ -293,16 +293,16 @@
       ],
       hard: [
         { tex: "(B \\cup C) - A", eval: (a,b,c) => (b || c) && !a, equivalent: "(B \\cup C) \\cap A^c" },
-        { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c, equivalent: "(A \\cup B)^c \\cup C \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c), equivalent: "\\text{Elements in at least TWO sets}" },
-        { tex: "(A \\cup B \\cup C) - (A \\cap B \\cap C)", eval: (a,b,c) => (a || b || c) && !(a && b && c), equivalent: "\\text{Elements in at most TWO sets}" },
-        { tex: "(A \\cap B \\cap C)^c", eval: (a,b,c) => !(a && b && c), equivalent: "A^c \\cup B^c \\cup C^c \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cup B \\cup C)^c", eval: (a,b,c) => !(a || b || c), equivalent: "A^c \\cap B^c \\cap C^c \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c), equivalent: "\\text{Outside region } \\cup \\text{ Center region}" },
-        { tex: "(A - B) \\cup (B - A)", eval: (a,b,c) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" },
-        { tex: "(A \\cup B \\cup C) - ((A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C))", eval: (a,b,c) => (a||b||c) && !((a&&b) || (b&&c) || (a&&c)), equivalent: "\\text{Elements in EXACTLY ONE set}" },
+        { tex: "(A^c \\cap B^c) \\cup C", eval: (a,b,c) => (!a && !b) || c, equivalent: "(A \\cup B)^c \\cup C", desc: "De Morgan's Law" },
+        { tex: "(A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C)", eval: (a,b,c) => (a&&b) || (b&&c) || (a&&c), desc: "elements in at least TWO sets" },
+        { tex: "(A \\cup B \\cup C) - (A \\cap B \\cap C)", eval: (a,b,c) => (a || b || c) && !(a && b && c), desc: "elements in at most TWO sets" },
+        { tex: "(A \\cap B \\cap C)^c", eval: (a,b,c) => !(a && b && c), equivalent: "A^c \\cup B^c \\cup C^c", desc: "De Morgan's Law" },
+        { tex: "(A \\cup B \\cup C)^c", eval: (a,b,c) => !(a || b || c), equivalent: "A^c \\cap B^c \\cap C^c", desc: "De Morgan's Law" },
+        { tex: "(A \\cup B \\cup C)^c \\cup (A \\cap B \\cap C)", eval: (a,b,c) => !(a||b||c) || (a&&b&&c), desc: "the outside region combined with the center region" },
+        { tex: "(A - B) \\cup (B - A)", eval: (a,b,c) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B)", desc: "Symmetric Difference" },
+        { tex: "(A \\cup B \\cup C) - ((A \\cap B) \\cup (B \\cap C) \\cup (A \\cap C))", eval: (a,b,c) => (a||b||c) && !((a&&b) || (b&&c) || (a&&c)), desc: "elements in EXACTLY ONE set" },
         { tex: "A - (B - C)", eval: (a,b,c) => a && !(b && !c), equivalent: "(A - B) \\cup (A \\cap C)" },
-        { tex: "(A \\cap B) \\cup (A^c \\cap B^c)", eval: (a,b,c) => (a && b) || (!a && !b), equivalent: "\\text{Complement of the Symmetric Difference}" },
+        { tex: "(A \\cap B) \\cup (A^c \\cap B^c)", eval: (a,b,c) => (a && b) || (!a && !b), desc: "the complement of the Symmetric Difference (elements in both A and B, or neither)" },
         { tex: "A \\cup (B - C)", eval: (a,b,c) => a || (b && !c) },
         { tex: "(A^c \\cap B^c) \\cup (A \\cap B)", eval: (a,b,c) => (!a && !b) || (a && b), equivalent: "((A - B) \\cup (B - A))^c" },
         { tex: "(A \\cup B^c) \\cap C", eval: (a,b,c) => (a || !b) && c },
@@ -331,16 +331,16 @@
         { tex: "B - A", eval: (a,b) => b && !a, equivalent: "B \\cap A^c" }
       ],
       medium: [
-        { tex: "\\emptyset", eval: (a,b) => false, equivalent: "A \\cap A^c \\text{ (The Empty Set)}" },
-        { tex: "U", eval: (a,b) => true, equivalent: "A \\cup A^c \\text{ (The Universal Set)}" },
-        { tex: "(A \\cup B)^c", eval: (a,b) => !(a || b), equivalent: "A^c \\cap B^c \\text{ (De Morgan's Law)}" },
-        { tex: "(A \\cap B)^c", eval: (a,b) => !(a && b), equivalent: "A^c \\cup B^c \\text{ (De Morgan's Law)}" },
+        { tex: "\\emptyset", eval: (a,b) => false, equivalent: "A \\cap A^c", desc: "The Empty Set" },
+        { tex: "U", eval: (a,b) => true, equivalent: "A \\cup A^c", desc: "The Universal Set" },
+        { tex: "(A \\cup B)^c", eval: (a,b) => !(a || b), equivalent: "A^c \\cap B^c", desc: "De Morgan's Law" },
+        { tex: "(A \\cap B)^c", eval: (a,b) => !(a && b), equivalent: "A^c \\cup B^c", desc: "De Morgan's Law" },
         { tex: "A \\cup B^c", eval: (a,b) => a || !b, equivalent: "(B - A)^c" },
         { tex: "A^c \\cup B", eval: (a,b) => !a || b, equivalent: "(A - B)^c" }
       ],
       hard: [
-        { tex: "(A - B) \\cup (B - A)", eval: (a,b) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B) \\text{ (Symmetric Difference)}" },
-        { tex: "(A \\cap B) \\cup (A \\cup B)^c", eval: (a,b) => (a && b) || !(a || b), equivalent: "((A - B) \\cup (B - A))^c \\text{ (Complement of Sym. Diff.)}" }
+        { tex: "(A - B) \\cup (B - A)", eval: (a,b) => (a && !b) || (b && !a), equivalent: "(A \\cup B) - (A \\cap B)", desc: "Symmetric Difference" },
+        { tex: "(A \\cap B) \\cup (A \\cup B)^c", eval: (a,b) => (a && b) || !(a || b), equivalent: "((A - B) \\cup (B - A))^c", desc: "Complement of the Symmetric Difference" }
       ]
     };
 
@@ -529,13 +529,28 @@
           this.updateStreakUI();
           
           let successDetails = "";
+          const tq = this.targetQuestion;
           
-          // Show simplified equivalence on advanced questions if one exists
-          if (this.targetQuestion.equivalent) {
+          // Formulate grammatically correct success details by distinguishing pure text descriptions from algebraic equivalents
+          if (tq.equivalent && tq.desc) {
             successDetails = `
               <div class="mt-3 text-emerald-950 text-sm font-medium bg-emerald-100/60 p-3.5 rounded-lg border border-emerald-300 shadow-sm">
-                <strong>💡 Fun Fact:</strong> The expression you chose, \\(${this.targetQuestion.tex}\\), can also be written as <strong>\\(${this.targetQuestion.equivalent}\\)</strong>.<br><br>
+                <strong>💡 Fun Fact:</strong> The expression you chose, \\(${tq.tex}\\), can also be written as <strong>\\(${tq.equivalent}\\)</strong>.<br><br>
+                This is known as <strong>${tq.desc}</strong>. It's a great example of logical equivalence!
+              </div>
+            `;
+          } else if (tq.equivalent) {
+            successDetails = `
+              <div class="mt-3 text-emerald-950 text-sm font-medium bg-emerald-100/60 p-3.5 rounded-lg border border-emerald-300 shadow-sm">
+                <strong>💡 Fun Fact:</strong> The expression you chose, \\(${tq.tex}\\), can also be written as <strong>\\(${tq.equivalent}\\)</strong>.<br><br>
                 This is a great example of logical equivalence—showing how different set operations can describe the exact same region!
+              </div>
+            `;
+          } else if (tq.desc) {
+            successDetails = `
+              <div class="mt-3 text-emerald-950 text-sm font-medium bg-emerald-100/60 p-3.5 rounded-lg border border-emerald-300 shadow-sm">
+                <strong>💡 Fun Fact:</strong> The expression you chose conceptually represents <strong>${tq.desc}</strong>.<br><br>
+                Translating between algebra and these plain-English descriptions is the true mark of mastery!
               </div>
             `;
           }
