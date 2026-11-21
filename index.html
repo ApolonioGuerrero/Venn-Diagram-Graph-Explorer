@@ -24,7 +24,7 @@
       options: { enableMenu: false }
     };
   </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   <style>
     body {
@@ -47,15 +47,15 @@
 
     /* MathJax Responsive Scaling - ensures long expressions shrink to fit without scrollbars */
     mjx-container {
-      max-width: 100%;
-      display: inline-flex !important;
+      width: 100%;
+      min-width: 0;
+      display: flex !important;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       box-sizing: border-box;
     }
     mjx-container svg {
-      max-width: 100%;
+      max-width: 100% !important;
       height: auto !important;
       object-fit: contain;
     }
@@ -467,8 +467,8 @@
           btn.role = 'radio';
           btn.setAttribute('aria-checked', 'false');
           btn.id = `opt-${idx}`;
-          // Added min-w-0 and overflow-hidden to allow MathJax SVG to scale down correctly
-          btn.className = 'w-full text-center p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all text-base sm:text-lg lg:text-xl text-blue-950 font-bold min-h-[64px] flex items-center justify-center min-w-0 overflow-hidden';
+          // Allows MathJax SVG to scale down correctly without rigid bounds clipping it
+          btn.className = 'w-full p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all text-base sm:text-lg lg:text-xl text-blue-950 font-bold min-h-[64px] flex items-center justify-center min-w-0';
           btn.onclick = () => this.selectOption(idx);
           btn.innerHTML = `\\(${opt.tex}\\)`;
           container.appendChild(btn);
